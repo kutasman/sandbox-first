@@ -4,6 +4,7 @@
       <h1 class="title">
         Hello World
       </h1>
+      <div class="subtitle">WOW! Now you can <router-link to="/login">Login!</router-link></div>
       <p class="subtitle">
         This is our first site with <span class="tag is-large is-primary">Vue.js</span>,<span class="tag is-large is-success">Vite</span> and <span class="tag is-large is-info">Bulma</span>!
       </p>
