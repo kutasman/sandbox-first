@@ -1,21 +1,21 @@
 <template>
-  <section class="section">
-    <div class="container is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5">
-      <div class="title">Reset password</div>
-      <div class="subtitle is-size-6">Remember password? <router-link to="/login">Login</router-link></div>
-      <div class="card">
-        <div class="card-content">
+  <section>
+    <div >
+      <div>Reset password</div>
+      <div>Remember password? <router-link to="/login">Login</router-link></div>
+      <div>
+        <div>
           <form action="#" @submit.prevent="handleSendLink">
-            <div class="field">
-              <label class="label">Email</label>
-              <div class="control">
-                <input class="input" type="email" placeholder="Email" v-model="email">
+            <div>
+              <label for="email">Email</label>
+              <div id="email">
+                <input  type="email" placeholder="Email" v-model="email">
               </div>
             </div>
           </form>
         </div>
-        <div class="card-footer is-flex is-justify-content-center p-3">
-          <button class="button is-success is-fullwidth" :class="{'is-loading': busy}" @click.prevent="handleSendLink">Send link</button>
+        <div>
+          <button :class="{'is-loading': busy}" @click.prevent="handleSendLink">Send link</button>
         </div>
       </div>
     </div>
