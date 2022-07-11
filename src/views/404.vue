@@ -1,9 +1,14 @@
 <template>
   <section class="section">
     <div class="container">
-      <img src="/img/404.jpg" alt="" />
-      <div class="title">These pages are still unwritten...</div>
-      <div class="subtitle is-size-6">Try to <router-link to="/">find something</router-link> else....</div>
+      <div class="is-flex is-flex-direction-row is-align-items-center">
+
+        <img src="/img/404.jpg" alt="" class="is-hei"/>
+        <div class="ml-5">
+          <div class="title">These pages are still unwritten...</div>
+          <div class="subtitle is-size-6">Try to <router-link to="/">find something</router-link> else....</div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -15,5 +20,7 @@ export default {
 </script>
 
 <style scoped>
-
+img {
+  height: 80vh
+}
 </style>

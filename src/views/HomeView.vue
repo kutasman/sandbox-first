@@ -1,17 +1,21 @@
+<script setup>
+import { useAuthStore } from '../stores/auth'
+const authStore = useAuthStore()
+
+</script>
 <template>
   <section class="section">
     <div class="container">
       <h1 class="title">
         Hello World
       </h1>
-      <div class="subtitle">WOW! Now you can <router-link to="/login">Login!</router-link></div>
-      <p class="subtitle">
-        This is our first site with <span class="tag is-large is-primary">Vue.js</span>,<span class="tag is-large is-success">Vite</span> and <span class="tag is-large is-info">Bulma</span>!
-      </p>
-      <p class="content">
-        Now please, <router-link class="is-underlined" to="/next-page">visit next page</router-link>...
-      </p>
-      <p>BTW... I'm the <b class="has-text-primary">HomeView</b> component. You can check me out in the <i class="has-text-grey-darker has-text-weight-bold">"src/views/HomeView.vue"</i> file</p>
+      <div v-if="authStore.isAuth">
+        <span>Hi, <router-link :to="{name: 'userAccount'}">{{ authStore.user.name }}</router-link>!</span>
+        <br>
+        <button class="button is-info is-small mt-4" @click.prevent="() => { authStore.logout(); $router.push('/login')}">Logout</button>
+      </div>
+      <div v-else class="subtitle">WOW! Now you can <router-link to="/login">Login!</router-link></div>
+
     </div>
   </section>
 </template>

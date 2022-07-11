@@ -22,6 +22,12 @@
               <router-link to="/reset-password">Forgot password?</router-link>
             </div>
           </form>
+          <template v-if="isDevMode">
+            <div class="my-3">
+              <button class="button is-small is-info" @click.prevent="loginAs('user')">login as User</button>
+            </div>
+          </template>
+
         </div>
         <div class="card-footer is-flex is-justify-content-center p-3">
           <button class="button is-success is-fullwidth" :class="{'is-loading': busy}" @click.prevent="handleLogIn">Send</button>
@@ -32,14 +38,27 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue'
+import {computed, reactive, ref} from 'vue'
 import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 const authStore = useAuthStore()
 const busy = ref(false)
+const router = useRouter()
 const formState = reactive({
   email: '',
   password: '',
 })
+
+const loginAs = async () => {
+  localStorage.setItem('authUser', JSON.stringify({
+    "id": 1,
+    "name": "Sam Smith",
+    "avatar": "/img/avatar.svg",
+    "email": "sam.smith@gmail.com"
+  }))
+  await authStore.me()
+  router.push('/')
+}
 
 const handleLogIn = () => {
   if (!formState.email) return
@@ -49,6 +68,8 @@ const handleLogIn = () => {
     busy.value = false
   }, 1500)
 }
+
+const isDevMode = computed(() => import.meta.env.MODE === 'development')
 </script>
 
 <style scoped>

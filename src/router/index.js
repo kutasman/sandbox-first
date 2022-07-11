@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import {useAuthStore} from "../stores/auth";
 import * as Guards from './guards'
+import { Guest, Auth } from './guards'
+import { RouterView } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,18 +15,57 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/LoginPage.vue')
+      component: () => import('@/views/LoginView.vue'),
+      meta: {guards: {Guest}}
     },
     {
       path: '/sign-up',
       name: 'signUp',
-      component: () => import('@/views/SignUpPage.vue')
+      component: () => import('@/views/SignUp.vue'),
+      meta: {guards: {Guest}}
     },
     {
       path: '/reset-password',
       name: 'resetPassword',
       component: () => import('@/views/ResetPassword.vue')
     },
+    {
+      path: '/verify-email',
+      name: 'verifyEmail',
+      component: () => import('@/views/VerifyEmail.vue'),
+      meta: {guards: {Auth}}
+    },
+    {
+      path: '/user',
+      component: RouterView,
+      children: [
+        {
+          path: '',
+          name: 'userAccount',
+          component: () => import('@/views/UserAccount.vue'),
+          meta: {guards: {Auth}},
+        },
+        {
+          path: 'games',
+          name: 'userGames',
+          component: () => import('@/views/UserGamesView.vue'),
+          meta: {guards: {Auth}},
+        },
+        {
+          path: 'games/:id',
+          name: 'userGameEdit',
+          component: () => import('@/views/UserGameEdit.vue'),
+          meta: {guards: {Auth}},
+        },
+        {
+          path: 'games/:id/round',
+          name: 'userGameRound',
+          component: () => import('@/views/UserGameRound.vue'),
+          meta: {guards: {Auth}},
+        },
+      ],
+    },
+
     {
       path: '/:pathMatch(.*)*',
       name: '404',

@@ -6,14 +6,15 @@ export const useAuthStore = defineStore({
     user: null
   }),
   getters: {
-    isAuth: (state) => !! state.user.id
+    isAuth: (state) => !! state.user?.id
   },
   actions: {
     signIn(formState){
       console.log(formState)
     },
     logout(){
-
+      localStorage.removeItem('authUser')
+      this.user = null
     },
     signUp(formState){
       console.log(formState)
@@ -22,10 +23,14 @@ export const useAuthStore = defineStore({
       console.log(email)
     },
     async me(){
-      return axios.get('http://localhost:3000/mock/user.json')
-          .then(res => {
-            this.user = res.data.data
-          })
+      const authUser = JSON.parse(localStorage.getItem('authUser') ?? 'null')
+      if (authUser){
+        this.user = authUser
+      }
+      // return axios.get('http://localhost:3000/mock/user.json')
+      //     .then(res => {
+      //       this.user = res.data.data
+      //     })
     },
     async checkUser(){
       if (!this.user){
