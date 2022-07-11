@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import {useAuthStore} from "../stores/auth";
+import * as Guards from './guards'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -38,7 +39,7 @@ router.beforeEach(async (to, from, next ) => {
 
   //init auth store
   const authStore = useAuthStore()
-  await authStore.fetchUser()
+  await authStore.checkUser()
 
   //check guards
   const meta = Object.assign({}, ...(to.matched.map(item => item.meta) || {}))

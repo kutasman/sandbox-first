@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-
+import axios from '../axios'
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    user: 0
+    user: null
   }),
   getters: {
     isAuth: (state) => !! state.user.id
@@ -21,8 +21,16 @@ export const useAuthStore = defineStore({
     resetPasswordLink(email){
       console.log(email)
     },
-    getUser(){
-
+    async me(){
+      return axios.get('http://localhost:3000/mock/user.json')
+          .then(res => {
+            this.user = res.data.data
+          })
+    },
+    async checkUser(){
+      if (!this.user){
+        await this.me()
+      }
     }
   }
 })
