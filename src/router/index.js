@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import {useAuthStore} from "../stores/auth";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -24,11 +25,31 @@ const router = createRouter({
       component: () => import('@/views/ResetPassword.vue')
     },
     {
-      path: '/next-page',
-      name: 'next-page',
-      component: () => import('@/views/NextPage.vue')
-    }
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('../views/404.vue'),
+    },
   ]
+})
+
+/*Router*/
+router.beforeEach(async (to, from, next ) => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  //init auth store
+  const authStore = useAuthStore()
+  await authStore.fetchUser()
+
+  //check guards
+  const meta = Object.assign({}, ...(to.matched.map(item => item.meta) || {}))
+  const guards = meta.guards
+  if (guards) {
+    for (const guardName in guards) {
+      if (Guards[guardName]( next ) !== true) return
+    }
+  }
+
+  next()
 })
 
 export default router
