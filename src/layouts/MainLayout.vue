@@ -3,17 +3,14 @@
   import TheFooter from '@/components/TheFooter.vue'
 </script>
 <template>
-  <section class="section pt-0">
-    <div class="container app">
 
-      <the-nav-bar />
+    <the-nav-bar />
 
-      <div class="main-content">
+    <section class="main-content section py-2">
+      <div class="container ">
         <slot  />
       </div>
+    </section>
 
-      <the-footer />
-    </div>
-
-  </section>
+    <the-footer />
 </template>

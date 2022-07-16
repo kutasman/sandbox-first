@@ -3,7 +3,8 @@ import axios from '../axios'
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    user: null
+    user: null,
+    init: false,
   }),
   getters: {
     isAuth: (state) => !! state.user?.id
@@ -38,7 +39,8 @@ export const useAuthStore = defineStore({
       }
     },
     async checkUser(){
-      if (!this.user){
+      if (!this.user && !this.init){
+        this.init = true
         await this.me()
       }
     }
