@@ -6,6 +6,18 @@
 $danger: green;
 @import "bulma/bulma";
 
+.app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  .main-content {
+    flex: 1;
+  }
+  .footer {
+    padding: 3rem 1.5rem 3rem;
+  }
+}
+
 
 
 

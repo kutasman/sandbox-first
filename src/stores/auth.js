@@ -9,11 +9,12 @@ export const useAuthStore = defineStore({
     isAuth: (state) => !! state.user?.id
   },
   actions: {
-    signIn(formState){
-      console.log(formState)
+    async signIn(formState){
+      await this.getCsrfCookie()
+      await axios.post('/login', formState)
     },
-    logout(){
-      localStorage.removeItem('authUser')
+    async logout(){
+      await axios.post('/logout')
       this.user = null
     },
     signUp(formState){
@@ -22,15 +23,19 @@ export const useAuthStore = defineStore({
     resetPasswordLink(email){
       console.log(email)
     },
+    async getCsrfCookie(){
+      const baseUrl = import.meta.env.VITE_API_URL.replace('/api', '')
+      await axios.get(`${baseUrl}/sanctum/csrf-cookie`);
+    },
     async me(){
-      const authUser = JSON.parse(localStorage.getItem('authUser') ?? 'null')
-      if (authUser){
-        this.user = authUser
+      try {
+        const res = await axios.get('/user')
+        if (res.status === 200){
+          this.user = res.data
+        }
+      } catch (e) {
+        //
       }
-      // return axios.get('http://localhost:3000/mock/user.json')
-      //     .then(res => {
-      //       this.user = res.data.data
-      //     })
     },
     async checkUser(){
       if (!this.user){

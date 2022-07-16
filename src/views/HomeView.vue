@@ -4,8 +4,7 @@ const authStore = useAuthStore()
 
 </script>
 <template>
-  <section class="section">
-    <div class="container">
+
       <h1 class="title">
         Hello World
       </h1>
@@ -16,6 +15,4 @@ const authStore = useAuthStore()
       </div>
       <div v-else class="subtitle">WOW! Now you can <router-link to="/login">Login!</router-link></div>
 
-    </div>
-  </section>
 </template>

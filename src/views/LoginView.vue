@@ -1,6 +1,5 @@
 <template>
-  <section class="section">
-    <div class="container is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5">
+    <div class="is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5">
       <div class="title">Log in</div>
       <div class="subtitle is-size-6">Doesn't have an account? <router-link to="/sign-up">Register</router-link></div>
       <div class="card">
@@ -9,13 +8,13 @@
             <div class="field">
               <label class="label">Email</label>
               <div class="control">
-                <input class="input" type="email" placeholder="Email" v-model="formState.email">
+                <input @keyup.enter="handleLogIn" class="input" type="email" placeholder="Email" v-model="formState.email">
               </div>
             </div>
             <div class="field">
               <label class="label">Password</label>
               <div class="control">
-                <input class="input" type="password" placeholder="**********" v-model="formState.password">
+                <input @keyup.enter="handleLogIn" class="input" type="password" placeholder="**********" v-model="formState.password">
               </div>
             </div>
             <div class="field has-text-right">
@@ -24,7 +23,7 @@
           </form>
           <template v-if="isDevMode">
             <div class="my-3">
-              <button class="button is-small is-info" @click.prevent="loginAs('user')">login as User</button>
+              <button type="submit" class="button is-small is-info" @click.prevent="loginAs('user')">login as User</button>
             </div>
           </template>
 
@@ -34,7 +33,6 @@
         </div>
       </div>
     </div>
-  </section>
 </template>
 
 <script setup>
@@ -50,23 +48,26 @@ const formState = reactive({
 })
 
 const loginAs = async () => {
-  localStorage.setItem('authUser', JSON.stringify({
-    "id": 1,
-    "name": "Sam Smith",
-    "avatar": "/img/avatar.svg",
-    "email": "sam.smith@gmail.com"
-  }))
+  busy.value = true
+  await authStore.signIn({
+    email: 'test@test.com',
+    password: 'password',
+  })
+
   await authStore.me()
-  router.push('/')
+  busy.value = false
+
+  await router.push('/')
 }
 
-const handleLogIn = () => {
+const handleLogIn = async () => {
   if (!formState.email) return
   busy.value = true
-  authStore.signIn(formState)
-  setTimeout(() => {
-    busy.value = false
-  }, 1500)
+  await authStore.signIn(formState)
+  await authStore.me()
+  busy.value = false
+  await router.push('/')
+
 }
 
 const isDevMode = computed(() => import.meta.env.MODE === 'development')

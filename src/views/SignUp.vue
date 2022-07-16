@@ -1,6 +1,5 @@
 <template>
-  <section class="section">
-    <div class="container is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5">
+    <div class="is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5">
       <div class="title">Sign up</div>
       <div class="subtitle is-size-6">Already have an account? <router-link to="/login">Sign in</router-link></div>
       <div class="card">
@@ -31,7 +30,6 @@
         </div>
       </div>
     </div>
-  </section>
 </template>
 
 <script setup>
