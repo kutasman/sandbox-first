@@ -8,19 +8,19 @@ export const useAuthStore = defineStore({
   }),
   getters: {
     isAuth: (state) => !! state.user?.id,
-    isVerified: state => !! state.user?.email_verified_at
+    isVerified: () => true //!! state.user?.email_verified_at
   },
   actions: {
-    async signIn(formState){
+    async signIn(vForm){
       await this.getCsrfCookie()
-      await axios.post('/login', formState)
+      await vForm.post('/login')
     },
     async logout(){
       await axios.post('/logout')
       this.user = null
     },
-    signUp(formState){
-      console.log(formState)
+    signUp(vForm){
+      return vForm.post('/register')
     },
     resetPasswordLink(email){
       console.log(email)
