@@ -1,11 +1,19 @@
 <script setup>
 import { useAuthStore } from '../stores/auth'
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { useGamesStore } from '../stores/games'
+import router from '../router'
 const authStore = useAuthStore()
+const gamesStore = useGamesStore()
 const handleLogout = async () => {
   await authStore.logout()
   await router.push('/')
+}
+const handleStartNewGame = async () => {
+  alert('development in progress')
+  const res = await gamesStore.startNewGame()
+  if (res.status === 200 && res.data.id){
+    await router.push({name: 'userGamesEdit', params: {id: res.data.id}})
+  }
 }
 </script>
 <template>
@@ -26,10 +34,9 @@ const handleLogout = async () => {
 
         <div id="navbarBasicExample" class="navbar-menu">
           <div class="navbar-start">
-            <router-link to="/" class="navbar-item">
-              Home
-            </router-link>
-
+            <a @click.prevent="handleStartNewGame" class="navbar-item">
+              Start a game
+            </a>
           </div>
 
           <div class="navbar-end">
