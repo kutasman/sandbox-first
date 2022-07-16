@@ -1,18 +1,17 @@
 <script setup>
-import { useAuthStore } from '../stores/auth'
-const authStore = useAuthStore()
-
+import useAuthUser from '../composables/useAuthUser'
+const user = useAuthUser()
 </script>
 <template>
-
-      <h1 class="title">
-        Hello World
-      </h1>
-      <div v-if="authStore.isAuth">
-        <span>Hi, <router-link :to="{name: 'userAccount'}">{{ authStore.user.name }}</router-link>!</span>
-        <br>
-        <button class="button is-info is-small mt-4" @click.prevent="() => { authStore.logout(); $router.push('/login')}">Logout</button>
-      </div>
-      <div v-else class="subtitle">WOW! Now you can <router-link to="/login">Login!</router-link></div>
+  <section class="hero">
+    <div class="hero-body px-0">
+      <p class="title">
+        Welcome, {{  user ? user.name : 'writer'}}!
+      </p>
+      <p v-if="!user">
+        Please, <router-link to="/login">login</router-link> or <router-link to="sign-up">create account</router-link>!
+      </p>
+    </div>
+  </section>
 
 </template>
