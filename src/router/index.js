@@ -65,7 +65,11 @@ const router = createRouter({
         },
       ],
     },
-
+    {
+      path: '/palette',
+      name: 'testPalette',
+      component: () => import('../views/PaletteTester.vue')
+    },
     {
       path: '/:pathMatch(.*)*',
       name: '404',
