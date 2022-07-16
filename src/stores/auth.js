@@ -7,7 +7,8 @@ export const useAuthStore = defineStore({
     init: false,
   }),
   getters: {
-    isAuth: (state) => !! state.user?.id
+    isAuth: (state) => !! state.user?.id,
+    isVerified: state => !! state.user?.email_verified_at
   },
   actions: {
     async signIn(formState){

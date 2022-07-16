@@ -2,10 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import {useAuthStore} from "../stores/auth";
 import * as Guards from './guards'
-import { Guest, Auth } from './guards'
+import { Guest, Auth, Verified } from './guards'
 import { RouterView } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    // always scroll to top
+    return { top: 0, behavior: 'smooth'  }
+  },
   routes: [
     {
       path: '/',
@@ -38,12 +42,13 @@ const router = createRouter({
     {
       path: '/user',
       component: RouterView,
+      meta: { guards: { Auth } },
       children: [
         {
           path: '',
           name: 'userAccount',
           component: () => import('@/views/UserAccount.vue'),
-          meta: {guards: {Auth}},
+          meta: {guards: {Verified}},
         },
         {
           path: 'games',
@@ -80,15 +85,13 @@ const router = createRouter({
 
 /*Router*/
 router.beforeEach(async (to, from, next ) => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
 
   //init auth store
   const authStore = useAuthStore()
   await authStore.checkUser()
 
   //check guards
-  const meta = Object.assign({}, ...(to.matched.map(item => item.meta) || {}))
-  const guards = meta.guards
+  const guards = Object.assign({}, ...(to.matched.map(item => item.meta.guards) || {}))
   if (guards) {
     for (const guardName in guards) {
       if (Guards[guardName]( next ) !== true) return

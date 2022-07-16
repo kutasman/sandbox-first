@@ -1,8 +1,12 @@
 <script setup>
-import useAuthUser from '../composables/useAuthUser'
 import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const authStore = useAuthStore()
-const user = useAuthUser()
+const handleLogout = async () => {
+  await authStore.logout()
+  await router.push('/')
+}
 </script>
 <template>
   <section class="section py-0">
@@ -29,7 +33,7 @@ const user = useAuthUser()
           </div>
 
           <div class="navbar-end">
-            <router-link v-if="user" class="navbar-item" :to="{name: 'userAccount'}">
+            <router-link v-if="authStore.isAuth" class="navbar-item" :to="{name: 'userAccount'}">
               <span class="icon">
                 <i class="fa fa-user"></i>
               </span>
@@ -39,7 +43,7 @@ const user = useAuthUser()
             </router-link>
             <div class="navbar-item">
               <div class="buttons">
-                <a class="button is-light" v-if="user" @click="authStore.logout">
+                <a class="button is-light" v-if="authStore.isAuth" @click="handleLogout">
                   <span class="icon">
                     <i class="fa fa-sign-out"></i>
                   </span>

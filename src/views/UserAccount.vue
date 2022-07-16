@@ -5,8 +5,8 @@
       </div>
       <div class="card-content is-flex is-flex-direction-row">
         <img src="/img/avatar.svg">
-        Name: {{ authStore.user.name }}<br>
-        Email: {{ authStore.user.email }}
+        Name: {{ authStore.user?.name }}<br>
+        Email: {{ authStore.user?.email }}
       </div>
     </div>
 </template>

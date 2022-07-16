@@ -13,9 +13,8 @@ export const Guest = (next) => {
     next({name: 'home'})
 }
 
-export const Unverified = (next) => {
+export const Verified = (next) => {
     const authStore = useAuthStore()
-
-    if (!authStore.isVerified) return true
-    next({name: 'home'})
+    if (authStore.isVerified) return true
+    next({name: 'verifyEmail'})
 }
