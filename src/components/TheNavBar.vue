@@ -2,12 +2,14 @@
 import { useAuthStore } from '../stores/auth'
 import { useGamesStore } from '../stores/games'
 import router from '../router'
+import {ref} from "vue";
 const authStore = useAuthStore()
 const gamesStore = useGamesStore()
 const handleLogout = async () => {
   await authStore.logout()
   await router.push('/')
 }
+const navbarIsActive = ref(false);
 const handleStartNewGame = async () => {
   alert('development in progress')
   const res = await gamesStore.startNewGame()
@@ -25,14 +27,20 @@ const handleStartNewGame = async () => {
             <strong>Project Name</strong>
           </router-link>
 
-          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <a role="button"
+             @click="navbarIsActive = !navbarIsActive"
+             class="navbar-burger"
+             :class="{'is-active': navbarIsActive}"
+             aria-label="menu"
+             aria-expanded="false"
+             data-target="navbar">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
         </div>
 
-        <div id="navbarBasicExample" class="navbar-menu">
+        <div id="navbar" class="navbar-menu" :class="{'is-active': navbarIsActive}">
           <div class="navbar-start">
             <a v-if="authStore.isAuth" @click.prevent="handleStartNewGame" class="navbar-item">
               Start a game
