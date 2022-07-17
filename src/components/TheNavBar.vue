@@ -34,7 +34,7 @@ const handleStartNewGame = async () => {
 
         <div id="navbarBasicExample" class="navbar-menu">
           <div class="navbar-start">
-            <a @click.prevent="handleStartNewGame" class="navbar-item">
+            <a v-if="authStore.isAuth" @click.prevent="handleStartNewGame" class="navbar-item">
               Start a game
             </a>
           </div>
