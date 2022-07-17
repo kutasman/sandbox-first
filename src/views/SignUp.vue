@@ -53,7 +53,7 @@
             <div class="help is-danger" v-if="form.errors.has('password')">{{ form.errors.get('password')}}</div>
           </div>
           <div class="card-footer is-flex is-justify-content-center p-3">
-            <button class="button is-success is-fullwidth"
+            <button class="button is-success is-fullwidth is-danger"
                     :class="{'is-loading': form.busy}">
               Register
             </button>

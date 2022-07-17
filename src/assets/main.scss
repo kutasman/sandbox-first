@@ -3,12 +3,13 @@
 // Import a Google Font
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
-$danger: hsl(348, 100%, 61%);
+$danger: rgb(83, 191, 157);
 $primary: hsl(171, 100%, 41%);
 $link: hsl(217, 71%, 53%);
 $success: hsl(141, 71%, 48%);
-$warning: hsl(48, 100%, 67%);
+$warning: hsl(56, 100%, 67%);
 $info: hsl(204, 86%, 53%);
+
 
 @import "bulma/bulma";
 
