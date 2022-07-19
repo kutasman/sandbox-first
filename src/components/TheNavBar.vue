@@ -41,9 +41,14 @@ const handleStartNewGame = async () => {
 
         <div id="navbar" class="navbar-menu" :class="{'is-active': navbarIsActive}">
           <div class="navbar-start">
-            <a v-if="authStore.isAuth" @click.prevent="handleStartNewGame" class="navbar-item">
-              Start a game
-            </a>
+            <template v-if="authStore.isAuth">
+              <router-link :to="{name: 'userGames'}" class="navbar-item">
+                User games
+              </router-link>
+              <a @click.prevent="handleStartNewGame" class="navbar-item">
+                Start a game
+              </a>
+            </template>
           </div>
 
           <div class="navbar-end">

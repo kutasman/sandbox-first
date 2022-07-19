@@ -3,6 +3,7 @@ import {onMounted, watch, ref, computed, shallowRef} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGamesStore } from '../stores/games'
 import { Form } from 'vform'
+import NoData from '@/components/NoData.vue'
 
 const gamesStore = useGamesStore()
 const route = useRoute()
@@ -23,7 +24,7 @@ const loadGame = async () => {
     formState.value.fill(gameLoaded)
   }
   limitRoundsDuration.value = !! formState.value?.max_lock_minutes
-  gameStatus.value = gameLoaded.status
+  gameStatus.value = gameLoaded?.status
 }
 const formBusy = computed(() => startForm.value.busy)
 
@@ -91,7 +92,7 @@ const handleStart = async () => {
           </div>
           <div class="column">
             <div class="field">
-              <div class="label">
+              <div class="label is-clickable" @click="limitRoundsDuration = !limitRoundsDuration">
                 <input type="checkbox" v-model="limitRoundsDuration">
                 Round duration limit
               </div>
@@ -101,7 +102,8 @@ const handleStart = async () => {
                         :class="{'is-danger': formState.errors.has('max_lock_minutes')}"
                         v-model="formState.max_lock_minutes"
                 >
-                  <option v-for="value in [15, 30, 45, 60]" :value="15" :key="value">{{value }} min</option>
+                  <option v-if="!limitRoundsDuration" :value="null" key="nulable">without limits</option>
+                  <option v-for="value in [15, 30, 45, 60]" :value="value" :key="value">{{value }} min</option>
                 </select>
               </div>
               <div class="help is-danger" v-if="formState.errors.has('max_lock_minutes')">{{ formState.errors.get('max_lock_minutes') }}</div>
@@ -116,7 +118,7 @@ const handleStart = async () => {
                   :class="{'is-loading': formBusy}">Start game</button>
         </div>
       </form>
-      <div v-else class="my-6 has-text-centered">{{ formState.busy ? 'loading...' : 'nothing here' }}</div>
+      <no-data v-else :loading="formState.busy"/>
     </div>
     <div class="card-footer"></div>
   </div>

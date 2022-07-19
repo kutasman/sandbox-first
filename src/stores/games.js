@@ -16,6 +16,9 @@ export const useGamesStore = defineStore({
       return data
     },
     update: vForm => vForm.put(`games/${vForm.id}`),
-    startGame: id => axios.post(`games/${id}/start`)
+    async getUserGames(page){
+      let res = await axios.get(`user/games`, {params: {page}})
+      return res.status === 200 ? res.data : {data: {}, meta: {}}
+    }
   }
 })
