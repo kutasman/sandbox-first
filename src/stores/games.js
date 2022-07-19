@@ -9,6 +9,13 @@ export const useGamesStore = defineStore({
   actions: {
     startNewGame(){
       return axios.get('games/create')
-    }
+    },
+    async getGameById(id){
+      if (!id) return null
+      const {data} = await axios.get(`games/${id}`)
+      return data
+    },
+    update: vForm => vForm.put(`games/${vForm.id}`),
+    startGame: id => axios.post(`games/${id}/start`)
   }
 })

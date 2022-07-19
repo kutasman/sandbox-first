@@ -11,9 +11,8 @@ const handleLogout = async () => {
 }
 const navbarIsActive = ref(false);
 const handleStartNewGame = async () => {
-  alert('development in progress')
   const res = await gamesStore.startNewGame()
-  if (res.status === 200 && res.data.id){
+  if ([200, 201].includes(res.status) && res.data.id){
     await router.push({name: 'userGamesEdit', params: {id: res.data.id}})
   }
 }
