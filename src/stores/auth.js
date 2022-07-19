@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from '../axios'
+const LS_ACCESS_TOKEN_KEY = 'access_token'
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
@@ -12,11 +13,16 @@ export const useAuthStore = defineStore({
   },
   actions: {
     async signIn(vForm){
-      await this.getCsrfCookie()
-      await vForm.post('/login')
+      // await this.getCsrfCookie()
+      // await vForm.post('/login')
+      const res = await vForm.post('/access-tokens')
+      if (res.status === 200){
+        localStorage.setItem(LS_ACCESS_TOKEN_KEY, res.data.access_token)
+      }
     },
     async logout(){
-      await axios.post('/logout')
+      // await axios.post('/logout')
+      localStorage.removeItem(LS_ACCESS_TOKEN_KEY)
       this.user = null
     },
     signUp(vForm){
