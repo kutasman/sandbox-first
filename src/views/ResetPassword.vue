@@ -15,7 +15,7 @@
           </form>
         </div>
         <div>
-          <button class="button is-success is-fullwidth" :class="{'is-loading': busy}" @click.prevent="handleSendLink">Send link</button>
+          <button class="button is-success is-fullwidth is-danger" :class="{'is-loading': busy}" @click.prevent="handleSendLink">Send link</button>
         </div>
       </div>
     </div>
