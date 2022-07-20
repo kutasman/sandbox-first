@@ -3,7 +3,7 @@
     <div class="is-flex is-justify-content-center is-align-items-center is-flex-direction-column mt-5" >
       <div class="title">Reset password</div>
       <div class="subtitle is-size-5">Remember password? <router-link to="/login">Login</router-link></div>
-      <div class="card">
+      <div class="card is-danger">
      <div class>
           <form action="#" @submit.prevent="handleSendLink">
             <div class="card-content is-size-6">
