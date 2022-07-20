@@ -11,7 +11,7 @@
     <div>excerpt...</div>
     <div class="level mt-3 is-mobile">
       <div class="level-left">
-        <div class="level-item" v-if="gameIsPlayable && false">
+        <div class="level-item" v-if="gameIsPlayable">
           <span
             @click.stop="handleCreateRound"
             :class="{'is-loading': draftRoundCreation}"
@@ -36,6 +36,7 @@ import {computed, ref} from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useGamesStore } from '../stores/games'
 import { useRouter } from 'vue-router'
+import {GAME_STATUSES} from "../constants";
 const router = useRouter()
 const gamesStore = useGamesStore()
 
@@ -47,10 +48,11 @@ const draftRoundCreation = ref(false)
 const gameIsPlayable = computed(() => true)
 
 const handleCreateRound = async () => {
-  draftRoundCreation.value = true
-  const round = await gamesStore.createDraftRound(props.game.id)
-  if (round){
-    await router.push({name: 'userGamesRoundEdit', params: {id: round.id} })
+  if ([GAME_STATUSES.STATUS_DRAFT, GAME_STATUSES.STATUS_WAITING_FIRST_ROUND].includes(props.game.status)){
+    const round = await gamesStore.getNextRound(props.game.id)
+    if (round){
+      await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
+    }
   }
 }
 

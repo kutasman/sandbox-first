@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useGamesStore } from '../stores/games'
 import { Form } from 'vform'
 import NoData from '@/components/NoData.vue'
+import { GAME_STATUSES } from '../constants'
 
 const gamesStore = useGamesStore()
 const route = useRoute()
@@ -17,7 +18,9 @@ const formState = ref(new Form({
 const startForm = ref(new Form())
 const gameStatus = shallowRef(null)
 const limitRoundsDuration = ref(false)
-
+const showRoundCreationButton = computed(() => {
+  return [GAME_STATUSES.STATUS_DRAFT, GAME_STATUSES.STATUS_WAITING_FIRST_ROUND].includes(gameStatus.value)
+})
 const loadGame = async () => {
   const gameLoaded = await gamesStore.getGameById(route.params.id)
   if (gameLoaded){
@@ -45,11 +48,11 @@ const handleChanged = () => {
 }
 
 const handleCreateRound = async () => {
-  // await startForm.value.post(`games/${formState.value.id}/start`)
-
-  const round = await gamesStore.createDraftRound(route.params.id)
-  if (round){
-    await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
+  if ([GAME_STATUSES.STATUS_DRAFT, GAME_STATUSES.STATUS_WAITING_FIRST_ROUND].includes(gameStatus.value)){
+    const round = await gamesStore.getNextRound(route.params.id)
+    if (round){
+      await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
+    }
   }
 }
 
@@ -116,7 +119,7 @@ const handleCreateRound = async () => {
           </div>
         </div>
 
-        <div class="field" v-if="gameStatus === 'Draft' && false">
+        <div class="field" v-if="showRoundCreationButton">
           <button form="game"
                   @click.prevent="handleCreateRound" class="button is-primary"
                   :class="{'is-loading': formBusy}">Create first round</button>

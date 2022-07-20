@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from '../axios'
+
 export const useGamesStore = defineStore({
   id: 'games',
   state: () => ({
@@ -19,6 +20,10 @@ export const useGamesStore = defineStore({
     async getUserGames(page){
       let res = await axios.get(`user/games`, {params: {page}})
       return res.status === 200 ? res.data : {data: {}, meta: {}}
+    },
+    async getNextRound(gameId){
+      const res = await  axios.get(`games/${gameId}/rounds/next`)
+      return [201, 200].includes(res.status) ? res.data : null
     },
     async createDraftRound(gameId){
       const res = await axios.get(`games/${gameId}/rounds/create`)
