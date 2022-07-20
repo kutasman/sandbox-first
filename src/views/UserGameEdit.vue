@@ -44,9 +44,13 @@ const handleChanged = () => {
   gamesStore.update(formState.value)
 }
 
-const handleStart = async () => {
-  await startForm.value.post(`games/${formState.value.id}/start`)
-  router.push({name: 'userGamesRound', params: {id: formState.value.id}})
+const handleCreateRound = async () => {
+  // await startForm.value.post(`games/${formState.value.id}/start`)
+
+  const round = await gamesStore.createDraftRound(route.params.id)
+  if (round){
+    await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
+  }
 }
 
 </script>
@@ -112,10 +116,10 @@ const handleStart = async () => {
           </div>
         </div>
 
-        <div class="field" v-if="gameStatus === 'Draft'">
+        <div class="field" v-if="gameStatus === 'Draft' && false">
           <button form="game"
-                  @click.prevent="handleStart" class="button is-primary"
-                  :class="{'is-loading': formBusy}">Start game</button>
+                  @click.prevent="handleCreateRound" class="button is-primary"
+                  :class="{'is-loading': formBusy}">Create first round</button>
         </div>
       </form>
       <no-data v-else :loading="formState.busy"/>

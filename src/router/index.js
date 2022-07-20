@@ -60,9 +60,9 @@ const router = createRouter({
           component: () => import('@/views/UserGameEdit.vue'),
         },
         {
-          path: 'games/:id/round',
-          name: 'userGamesRound',
-          component: () => import('@/views/UserGameRound.vue'),
+          path: 'round/:id',
+          name: 'userGamesRoundEdit',
+          component: () => import('@/views/UserGameRoundEdit.vue'),
         },
       ],
     },

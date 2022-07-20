@@ -19,6 +19,17 @@ export const useGamesStore = defineStore({
     async getUserGames(page){
       let res = await axios.get(`user/games`, {params: {page}})
       return res.status === 200 ? res.data : {data: {}, meta: {}}
-    }
+    },
+    async createDraftRound(gameId){
+      const res = await axios.get(`games/${gameId}/rounds/create`)
+      return res.status === 201 ? res.data : null
+    },
+    async getRoundById(roundId){
+      const res = await axios.get(`rounds/${roundId}`)
+      return res.status === 200
+        ? res.data
+        : null
+    },
+
   }
 })

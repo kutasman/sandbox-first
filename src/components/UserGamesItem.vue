@@ -3,13 +3,18 @@
       :class="{'has-text-grey-light': game.status === 'Draft'}"
       class="tile game-item notification is-light is-vertical is-clickable">
     <div class="title">{{ game.status !== 'Draft' ? game.name : 'Draft game' }}</div>
-    <div class="subtitle">rounds: {{ game.rounds_max ?? 'unlimited' }}, round duration: {{ game.max_lock_minutes ? `${game.max_lock_minutes} min.` : 'unlimited' }}</div>
+    <div class="subtitle">
+      rounds: {{ game.rounds_max ?? 'unlimited' }},
+      round duration: {{ game.max_lock_minutes ? `${game.max_lock_minutes} min.` : 'unlimited' }}
+      <span v-if="game.locked_at">, locked at: {{ game.locked_at}}</span>
+    </div>
     <div>excerpt...</div>
     <div class="level mt-3 is-mobile">
       <div class="level-left">
-        <div class="level-item" v-if="gameIsPlayable">
+        <div class="level-item" v-if="gameIsPlayable && false">
           <span
-            @click.stop="$router.push({name: 'userGamesRound', params: {id: game.id} })"
+            @click.stop="handleCreateRound"
+            :class="{'is-loading': draftRoundCreation}"
             class="button is-small is-primary" >
             <i class="fa fa-play" />
           </span>
@@ -27,14 +32,27 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import {useAuthStore} from "../stores/auth";
+import {computed, ref} from 'vue'
+import { useAuthStore } from '../stores/auth'
+import { useGamesStore } from '../stores/games'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const gamesStore = useGamesStore()
 
 const authStore = useAuthStore()
 
 const props = defineProps(['game'])
+const draftRoundCreation = ref(false)
 
-const gameIsPlayable = computed(() => props.game.locked_at === null && props.game.status !== 'Draft')
+const gameIsPlayable = computed(() => true)
+
+const handleCreateRound = async () => {
+  draftRoundCreation.value = true
+  const round = await gamesStore.createDraftRound(props.game.id)
+  if (round){
+    await router.push({name: 'userGamesRoundEdit', params: {id: round.id} })
+  }
+}
 
 </script>
 
