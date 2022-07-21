@@ -29,8 +29,11 @@ export const useGamesStore = defineStore({
       const res = await axios.get(`games/${gameId}/rounds/create`)
       return res.status === 201 ? res.data : null
     },
-    async getRoundById(roundId){
-      const res = await axios.get(`rounds/${roundId}`)
+    updateRound(vForm){
+      return vForm.put(`rounds/${vForm.id}`)
+    },
+    async getRoundById(roundId, params= {}){
+      const res = await axios.get(`rounds/${roundId}`, {params})
       return res.status === 200
         ? res.data
         : null
