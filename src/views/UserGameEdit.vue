@@ -1,6 +1,6 @@
 <script setup>
 import {onMounted, watch, ref, computed, shallowRef} from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useGamesStore } from '../stores/games'
 import { Form } from 'vform'
 import NoData from '@/components/NoData.vue'
@@ -8,7 +8,6 @@ import { GAME_STATUSES } from '../constants'
 
 const gamesStore = useGamesStore()
 const route = useRoute()
-const router = useRouter()
 const formState = ref(new Form({
   id: null,
   name: '',
@@ -46,14 +45,9 @@ watch(() => route.params.id, () => {
 const handleChanged = () => {
   gamesStore.update(formState.value)
 }
-
+import goToNextRound from '../composables/goToNextRound'
 const handleCreateRound = async () => {
-  if ([GAME_STATUSES.STATUS_DRAFT, GAME_STATUSES.STATUS_WAITING_FIRST_ROUND].includes(gameStatus.value)){
-    const round = await gamesStore.getNextRound(route.params.id)
-    if (round){
-      await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
-    }
-  }
+  await goToNextRound({gameId: route.params.id, gameStatus: gameStatus.value})
 }
 
 </script>

@@ -32,28 +32,17 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
-import { useGamesStore } from '../stores/games'
-import { useRouter } from 'vue-router'
-import {GAME_STATUSES} from "../constants";
-const router = useRouter()
-const gamesStore = useGamesStore()
-
 const authStore = useAuthStore()
 
 const props = defineProps(['game'])
 const draftRoundCreation = ref(false)
 
 const gameIsPlayable = computed(() => true)
-
+import goToNextRound from '../composables/goToNextRound'
 const handleCreateRound = async () => {
-  if ([GAME_STATUSES.STATUS_DRAFT, GAME_STATUSES.STATUS_WAITING_FIRST_ROUND].includes(props.game.status)){
-    const round = await gamesStore.getNextRound(props.game.id)
-    if (round){
-      await router.push({name: 'userGamesRoundEdit', params: {id: round.id}})
-    }
-  }
+  await goToNextRound({gameId: props.game.id, gameStatus: props.game.status})
 }
 
 </script>
