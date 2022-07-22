@@ -96,7 +96,7 @@ const handleCreateRound = async () => {
             </div>
           </div>
           <div class="column">
-            <div class="field">
+            <div class="field" v-if="false">
               <div class="label is-clickable" @click="limitRoundsDuration = !limitRoundsDuration">
                 <input type="checkbox" v-model="limitRoundsDuration">
                 Round duration limit
