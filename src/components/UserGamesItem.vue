@@ -8,7 +8,7 @@
       round duration: {{ game.max_lock_minutes ? `${game.max_lock_minutes} min.` : 'unlimited' }}
       <span v-if="game.locked_at">, locked at: {{ game.locked_at}}</span>
     </div>
-    <div>excerpt...</div>
+    <div class="white-space-break-spaces" v-if="game.latest_round_excerpt">...{{game.latest_round_excerpt }}</div>
     <div class="level mt-3 is-mobile">
       <div class="level-left">
         <div class="level-item" v-if="gameIsPlayable">
