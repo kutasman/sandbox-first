@@ -40,7 +40,7 @@ const authStore = useAuthStore()
 const props = defineProps(['game'])
 const draftRoundCreation = ref(false)
 
-const gameIsPlayable = computed(() => true)
+const gameIsPlayable = computed(() => props.game.is_playable_for_current_user)
 import goToNextRound from '../composables/goToNextRound'
 const handleCreateRound = async () => {
   await goToNextRound({gameId: props.game.id, gameStatus: props.game.status})
