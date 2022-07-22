@@ -20,13 +20,13 @@ const roundFormState = ref(new Form({
 const roundStatus = ref(null)
 
 const showExcerptForm = ref(false)
-
-const handleUpdate = debounce(() => {
+const handleUpdateWithoudDebounce = async () => {
   roundFormState.value.update({
     excerpt: excerptFinal.value
   })
-  gamesStore.updateRound(roundFormState.value)
-}, 1000)
+  await gamesStore.updateRound(roundFormState.value)
+}
+const handleUpdate = debounce( handleUpdateWithoudDebounce, 1000)
 
 const publishRoundForm = ref( new Form({id: null}))
 
@@ -46,7 +46,8 @@ const handleToggleExcerptForm = () => {
 
 const excerptFinal = computed(() => roundFormState.value.excerpt_length ? limitedText.value.slice(0-roundFormState.value.excerpt_length) : '')
 
-const handlePublish = () => {
+const handlePublish = async () => {
+  await handleUpdateWithoudDebounce()
   publishRoundForm.value.fill({id: roundFormState.value.id})
   gamesStore.publishRound(publishRoundForm.value)
     .then(res => {
@@ -148,9 +149,6 @@ onMounted(async () => {
   </div>
 </template>
 <style scoped lang="scss">
-.white-space-break-spaces {
-  white-space: break-spaces;
-}
 :deep(.vue3-slider){
   .handle {
     transform: scale(1.5) !important;

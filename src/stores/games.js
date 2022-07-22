@@ -29,8 +29,8 @@ export const useGamesStore = defineStore({
       const res = await axios.get(`games/${gameId}/rounds/create`)
       return res.status === 201 ? res.data : null
     },
-    updateRound(vForm){
-      return vForm.put(`rounds/${vForm.id}`)
+    async updateRound(vForm){
+      return await vForm.put(`rounds/${vForm.id}`)
     },
     publishRound(vForm){
       return vForm.post(`rounds/${vForm.id}/publish`)
