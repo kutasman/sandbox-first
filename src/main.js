@@ -9,6 +9,7 @@ const app = createApp(App)
 import MasonryWall from '@yeger/vue-masonry-wall'
 import('@fortawesome/fontawesome-free/js/all.min')
 import ResizeTextarea from 'resize-textarea-vue3'
+
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)

@@ -60,6 +60,10 @@ const handleCreateRound = async () => {
         </span>
         {{ gameStatus === 'Draft' ? 'Start new game' : 'Edit game' }}
       </div>
+      <div class="card-header-icon">
+        <span class="loader" v-if="formState.busy" />
+        <small class="has-text-grey-light" v-if="formState.recentlySuccessful" >saved</small>
+      </div>
     </div>
     <div class="card-content">
       <form action="#" id="game"
@@ -84,7 +88,7 @@ const handleCreateRound = async () => {
                   :class="{'is-danger': formState.errors.has('rounds_max')}"
                   v-model="formState.rounds_max"
                 >
-                  <option v-for="value in [2, 5, 7, 10, 15, 30]" :value="value" :key="value">{{ value }}</option>
+                  <option v-for="value in [2, 3, 5, 7, 10, 15, 30]" :value="value" :key="value">{{ value }}</option>
                 </select>
               </div>
               <div class="help is-danger" v-if="formState.errors.has('rounds_max')">{{ formState.errors.get('rounds_max') }}</div>

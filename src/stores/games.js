@@ -32,6 +32,9 @@ export const useGamesStore = defineStore({
     updateRound(vForm){
       return vForm.put(`rounds/${vForm.id}`)
     },
+    publishRound(vForm){
+      return vForm.post(`rounds/${vForm.id}/publish`)
+    },
     async getRoundById(roundId, params= {}){
       const res = await axios.get(`rounds/${roundId}`, {params})
       return res.status === 200

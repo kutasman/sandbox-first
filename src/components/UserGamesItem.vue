@@ -19,7 +19,7 @@
             <i class="fa fa-play" />
           </span>
         </div>
-        <div class="level-item" v-if="game.user_id === authStore.user?.id">
+        <div class="level-item" v-if="game.user_id === authStore.user?.id && game.status !== STATUS_STARTED">
           <span
             @click.stop="$router.push({name: 'userGamesEdit', params: {id: game.id} })"
             class="button is-small is-primary">
@@ -34,6 +34,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
+import {STATUS_STARTED} from '../constants'
 const authStore = useAuthStore()
 
 const props = defineProps(['game'])
