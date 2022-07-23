@@ -11,9 +11,9 @@ export const useGamesStore = defineStore({
     startNewGame(){
       return axios.get('games/create')
     },
-    async getGameById(id){
+    async getGameById(id, params = {}){
       if (!id) return null
-      const {data} = await axios.get(`games/${id}`)
+      const {data} = await axios.get(`games/${id}`, {params})
       return data
     },
     update: vForm => vForm.put(`games/${vForm.id}`),
@@ -41,6 +41,9 @@ export const useGamesStore = defineStore({
         ? res.data
         : null
     },
-
+    async getPublicGames(page){
+      let res = await axios.get(`games`, {params: {page}})
+      return res.status === 200 ? res.data : {data: {}, meta: {}}
+    }
   }
 })

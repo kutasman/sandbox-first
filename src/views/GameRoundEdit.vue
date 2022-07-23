@@ -43,6 +43,7 @@ const handleToggleExcerptForm = () => {
 
   handleUpdate()
 }
+const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) === 1)
 
 const excerptFinal = computed(() => roundFormState.value.excerpt_length ? limitedText.value.slice(0-roundFormState.value.excerpt_length) : '')
 
@@ -87,8 +88,8 @@ onMounted(async () => {
         </div>
       </div>
       <div class="card-content" v-if="roundStatus === STATUS_PUBLISHED">
-        <div class="title is-size-4">Round has been published</div>
-        <div class="field">
+        <div class="title is-size-4">{{ isLastRound ? 'The last round has been published!' : 'Round has been published'}}</div>
+        <div class="field" v-if="excerptFinal">
           <div class="label">Excerpt</div>
           <div class="content has-text-primary is-size-4">{{ excerptFinal }}</div>
         </div>
@@ -96,10 +97,15 @@ onMounted(async () => {
           <div class="label">Text</div>
           <div class="content white-space-break-spaces">{{ roundFormState.text }}</div>
         </div>
+        <div v-if="isLastRound && false"><button class="button is-primary" @click.prevent="" >View all rounds</button> </div>
       </div>
       <div class="card-content" v-else>
+        <div class="field" v-if="game?.latest_round_excerpt">
+          <div class="label">Previous round excerpt</div>
+          ...{{ game?.latest_round_excerpt }}
+        </div>
         <div class="field">
-          <label class="label">Text</label>
+          <label class="label">Text<span class="tag is-info is-small ml-3" v-if="isLastRound">last round</span></label>
           <div v-if="showExcerptForm" class="my-4 white-space-break-spaces">
             <span class="has-text-grey">{{ limitedText.slice(0, limitedText.length - roundFormState.excerpt_length) }}</span>
             <span class="has-text-primary-dark is-size-4" v-if="roundFormState.excerpt_length">{{ excerptFinal }}</span>
@@ -132,13 +138,15 @@ onMounted(async () => {
 
         <div class="field">
           <div class="buttons">
-            <button class="button" :class="showExcerptForm ? 'is-light' : 'is-primary'" @click.prevent="handleToggleExcerptForm">
+            <button class="button"
+                    v-if="!isLastRound"
+                    :class="showExcerptForm ? 'is-light' : 'is-primary'" @click.prevent="handleToggleExcerptForm">
               <span class="mr-3" v-if="showExcerptForm"><i class="fa fa-pencil" /> </span>
               {{ showExcerptForm ? 'Edit round text' : 'Define excerpt' }}
             </button>
             <button class="button is-primary"
                     :class="{'is-loading': publishRoundForm.busy}"
-                    :disabled="!showExcerptForm"
+                    :disabled="!isLastRound && !showExcerptForm"
                     @click.prevent="handlePublish">
               Publish round
             </button>

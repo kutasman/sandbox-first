@@ -59,12 +59,18 @@ const router = createRouter({
           name: 'userGamesEdit',
           component: () => import('@/views/UserGameEdit.vue'),
         },
-        {
-          path: 'round/:id',
-          name: 'userGamesRoundEdit',
-          component: () => import('@/views/UserGameRoundEdit.vue'),
-        },
+
       ],
+    },
+    {
+      path: '/rounds/:id',
+      name: 'gamesRoundEdit',
+      component: () => import('@/views/GameRoundEdit.vue'),
+    },
+    {
+      path: '/games',
+      name: 'publicGames',
+      component: () => import('@/views/PublicGames.vue'),
     },
     {
       path: '/palette',

@@ -42,6 +42,9 @@ const handleStartNewGame = async () => {
         <div id="navbar" class="navbar-menu" :class="{'is-active': navbarIsActive}">
           <div class="navbar-start">
             <template v-if="authStore.isAuth">
+              <router-link :to="{name: 'publicGames'}" class="navbar-item">
+                Public games
+              </router-link>
               <router-link :to="{name: 'userGames'}" class="navbar-item">
                 User games
               </router-link>
