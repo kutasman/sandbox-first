@@ -66,11 +66,13 @@ const router = createRouter({
       path: '/rounds/:id',
       name: 'gamesRoundEdit',
       component: () => import('@/views/GameRoundEdit.vue'),
+      meta: { guards: { Auth } },
     },
     {
       path: '/games',
       name: 'publicGames',
       component: () => import('@/views/PublicGames.vue'),
+      meta: { guards: { Auth } },
     },
     {
       path: '/palette',
