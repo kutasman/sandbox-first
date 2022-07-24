@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { Form } from 'vform'
 import { useGamesStore } from '../stores/games'
 import { debounce } from 'lodash'
+import GameRoundsListModal from '@/components/GameRoundsListModal.vue'
 import slider from "vue3-slider"
 import { STATUS_PUBLISHED } from "../constants";
 const route = useRoute()
@@ -43,7 +44,7 @@ const handleToggleExcerptForm = () => {
 
   handleUpdate()
 }
-const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) === 1)
+const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) <= 1)
 
 const excerptFinal = computed(() => roundFormState.value.excerpt_length ? limitedText.value.slice(0-roundFormState.value.excerpt_length) : '')
 
@@ -89,6 +90,10 @@ onMounted(async () => {
       </div>
       <div class="card-content" v-if="roundStatus === STATUS_PUBLISHED">
         <div class="title is-size-4">{{ isLastRound ? 'The last round has been published!' : 'Round has been published'}}</div>
+        <div class="field" v-if="isLastRound">
+          <game-rounds-list-modal :game="game" button-text="Show all rounds" />
+        </div>
+
         <div class="field" v-if="excerptFinal">
           <div class="label">Excerpt</div>
           <div class="content has-text-primary is-size-4">{{ excerptFinal }}</div>
@@ -97,7 +102,6 @@ onMounted(async () => {
           <div class="label">Text</div>
           <div class="content white-space-break-spaces">{{ roundFormState.text }}</div>
         </div>
-        <div v-if="isLastRound && false"><button class="button is-primary" @click.prevent="" >View all rounds</button> </div>
       </div>
       <div class="card-content" v-else>
         <div class="field" v-if="game?.latest_round_excerpt">

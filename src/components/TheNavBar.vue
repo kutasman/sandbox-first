@@ -46,9 +46,11 @@ const handleStartNewGame = async () => {
                 Public games
               </router-link>
               <router-link :to="{name: 'userGames'}" class="navbar-item">
-                User games
+                Your games
               </router-link>
-              <a @click.prevent="handleStartNewGame" class="navbar-item">
+              <a @click.prevent="handleStartNewGame"
+                 class="navbar-item"
+                 :class="{'router-link-active': $route?.name === 'userGamesEdit'}">
                 Start a game
               </a>
             </template>

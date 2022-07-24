@@ -38,8 +38,8 @@ watch(() => limitRoundsDuration.value, (to) => {
   formState.value.max_lock_minutes = to ? 15 : null
 })
 
-watch(() => route.params.id, () => {
-  loadGame()
+watch(() => route.params.id, (to) => {
+  if (to?.name === 'userGamesEdit') loadGame()
 })
 
 const handleChanged = () => {

@@ -28,33 +28,7 @@
           </span>
         </div>
         <div class="level-item" v-if="game.status === STATUS_FINISHED" >
-          <span class="button is-primary is-small" @click="handleShowRounds"><i class="fa fa-eye" /></span>
-          <div class="modal" :class="{'is-active': showRounds}">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-              <div class="modal-card-head">
-                <div class="modal-card-title">{{game.name}}</div>
-                <button class="delete" aria-label="close" @click.prevent="showRounds = false"></button>
-              </div>
-              <section class="modal-card-body">
-                <div v-for="round in allRounds" :key="round.id">
-                  <div class="card is-shadowless round">
-                    <div class="card-content">
-                      <div class="white-space-break-spaces">{{ round.text }}</div>
-                      <small class="is-flex is-justify-content-end has-text-grey-light ">
-                        <span class="mr-1"><i class="fa fa-user" /></span>
-                        <i>{{round.author.name}}</i>
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <footer class="modal-card-foot">
-                <button class="button" @click.prevent="showRounds = false">Close</button>
-              </footer>
-            </div>
-            <button class="modal-close is-large" @click.prevent="showRounds = false" aria-label="close"></button>
-          </div>
+          <game-rounds-list-modal :game="game"/>
         </div>
       </div>
     </div>
@@ -66,6 +40,7 @@ import { computed, ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useGamesStore } from '../stores/games'
 import { STATUS_FINISHED, STATUS_WAITING_FIRST_ROUND, STATUS_DRAFT} from '../constants'
+import GameRoundsListModal from '@/components/GameRoundsListModal.vue'
 const authStore = useAuthStore()
 const gamesStore = useGamesStore()
 const props = defineProps(['game'])
@@ -77,16 +52,7 @@ import goToNextRound from '../composables/goToNextRound'
 const handleCreateRound = async () => {
   await goToNextRound({gameId: props.game.id, gameStatus: props.game.status})
 }
-const handleShowRounds = async () => {
-  if (props.game?.status !== STATUS_FINISHED) return
-  if (!allRounds.value.length){
-    const game = await gamesStore.getGameById(props.game.id, {includes: ['rounds.author']})
-    if (game){
-      allRounds.value = game.rounds
-    }
-  }
-  showRounds.value = true
-}
+
 
 </script>
 
@@ -100,9 +66,6 @@ const handleShowRounds = async () => {
     position: absolute;
     right: .8rem;
     top: .5rem;
-  }
-  .round {
-    border-bottom: 1px solid lightgrey;
   }
 }
 </style>
