@@ -21,19 +21,20 @@ const roundFormState = ref(new Form({
 const roundStatus = ref(null)
 
 const showExcerptForm = ref(false)
-const handleUpdateWithoudDebounce = async () => {
+const handleUpdateWithoutDebounce = async () => {
+  if (roundStatus.value === STATUS_PUBLISHED) return
   roundFormState.value.update({
     excerpt: excerptFinal.value
   })
   await gamesStore.updateRound(roundFormState.value)
 }
-const handleUpdate = debounce( handleUpdateWithoudDebounce, 1000)
+const handleUpdate = debounce( handleUpdateWithoutDebounce, 700)
 
 const publishRoundForm = ref( new Form({id: null}))
 
 const limitedText = computed(() => `${roundFormState.value.text.length > 1000 ? '...' : ''}` + roundFormState.value.text.slice(0, 1000))
 
-const handleToggleExcerptForm = () => {
+const handleToggleExcerptForm = async () => {
   showExcerptForm.value = ! showExcerptForm.value
   if (!showExcerptForm.value ){
     roundFormState.value.excerpt_length = 0
@@ -42,19 +43,20 @@ const handleToggleExcerptForm = () => {
     roundFormState.value.excerpt = excerptFinal.value
   }
 
-  handleUpdate()
+  await handleUpdateWithoutDebounce()
 }
-const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) <= 1)
+const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) === 0)
 
 const excerptFinal = computed(() => roundFormState.value.excerpt_length ? limitedText.value.slice(0-roundFormState.value.excerpt_length) : '')
 
 const handlePublish = async () => {
-  await handleUpdateWithoudDebounce()
-  publishRoundForm.value.fill({id: roundFormState.value.id})
+  await handleUpdateWithoutDebounce()
+  await publishRoundForm.value.fill({id: roundFormState.value.id})
   gamesStore.publishRound(publishRoundForm.value)
     .then(res => {
       if (res.status === 200){
         roundStatus.value = STATUS_PUBLISHED
+        game.value.finished_rounds_count++
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     })
@@ -76,7 +78,6 @@ onMounted(async () => {
 </script>
 <template>
   <div class="card">
-
     <form action="#" @input="handleUpdate">
       <div class="card-header">
         <div class="card-header-title">
