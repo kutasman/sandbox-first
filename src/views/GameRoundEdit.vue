@@ -6,7 +6,7 @@ import { useGamesStore } from '../stores/games'
 import { debounce } from 'lodash'
 import GameRoundsListModal from '@/components/GameRoundsListModal.vue'
 import slider from "vue3-slider"
-import { STATUS_PUBLISHED } from "../constants";
+import {STATUS_DRAFT, STATUS_PUBLISHED} from "../constants";
 const route = useRoute()
 
 const gamesStore = useGamesStore()
@@ -45,7 +45,10 @@ const handleToggleExcerptForm = async () => {
 
   await handleUpdateWithoutDebounce()
 }
-const isLastRound = computed(() => game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 ) === 0)
+const isLastRound = computed(() => {
+  const roundLeft = game.value?.rounds_max - ( game.value?.finished_rounds_count ?? 0 )
+  return ( roundStatus.value === STATUS_PUBLISHED  && roundLeft === 0) || (roundStatus.value === STATUS_DRAFT && roundLeft === 1)
+})
 
 const excerptFinal = computed(() => roundFormState.value.excerpt_length ? limitedText.value.slice(0-roundFormState.value.excerpt_length) : '')
 
@@ -78,6 +81,8 @@ onMounted(async () => {
 </script>
 <template>
   <div class="card">
+    {{ game}}
+    {{ isLastRound}}
     <form action="#" @input="handleUpdate">
       <div class="card-header">
         <div class="card-header-title">
